@@ -35,9 +35,52 @@
     opacity:0.9;
     transform:translateZ(0);
     pointer-events:none;
+    will-change: transform;
   }
-  .blob.a{width:420px;height:420px;right:-80px;top:-60px;background:radial-gradient(circle at 30% 30%, #bfe9ff 0%, #9ad1ff 30%, transparent 60%);}
-  .blob.b{width:360px;height:360px;left:-120px;bottom:-80px;background:radial-gradient(circle at 70% 70%, #ffd9e8 0%, #ffc8d1 30%, transparent 60%);}
+  .blob.a{
+    width:420px;height:420px;right:-80px;top:-60px;
+    background:radial-gradient(circle at 30% 30%, #bfe9ff 0%, #9ad1ff 30%, transparent 60%);
+    animation: float-blob-a 8s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+  }
+  .blob.b{
+    width:360px;height:360px;left:-120px;bottom:-80px;
+    background:radial-gradient(circle at 70% 70%, #ffd9e8 0%, #ffc8d1 30%, transparent 60%);
+    animation: float-blob-b 10s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+  }
+
+  @keyframes float-blob-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(20px, -30px) scale(1.05); }
+    66% { transform: translate(-15px, 20px) scale(0.98); }
+  }
+
+  @keyframes float-blob-b {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-25px, 25px) scale(0.98); }
+    66% { transform: translate(18px, -18px) scale(1.05); }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
   header{
     width:100%;
@@ -46,6 +89,7 @@
     gap:18px;
     align-items:center;
     justify-content:space-between;
+    animation: fade-in-down 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
   .brand{
     display:flex;
@@ -60,6 +104,11 @@
     display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;
     backdrop-filter: blur(8px) saturate(120%);
     overflow:hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .logo:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(124,58,237,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
   }
   .logo img{
     width:100%;
@@ -85,6 +134,20 @@
     padding:20px;
     backdrop-filter: blur(10px) saturate(120%);
     box-shadow: 0 8px 30px rgba(12,18,30,0.06);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fade-in-up 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .card:nth-of-type(1){
+    animation-delay: 0.1s;
+  }
+  .card:nth-of-type(2){
+    animation-delay: 0.2s;
+  }
+  .card:hover{
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.05));
+    border-color: rgba(255,255,255,0.35);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(12,18,30,0.12);
   }
 
   .hero-grid{
@@ -92,47 +155,129 @@
     gap:18px;
     flex-direction:column;
   }
-  .intro h2{margin:0;font-size:22px;}
-  .intro p{color:var(--muted);margin:8px 0 0 0;line-height:1.5;}
+  .intro h2{
+    margin:0;font-size:22px;
+    animation: fade-in-up 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    opacity: 0;
+  }
+  .intro p{
+    color:var(--muted);margin:8px 0 0 0;line-height:1.5;
+    animation: fade-in-up 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+    opacity: 0;
+  }
 
-  .cta-row{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;}
+  .cta-row{
+    display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;
+    animation: fade-in-up 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+    opacity: 0;
+  }
   .btn{
     padding:10px 14px;border-radius:10px;border:0;font-weight:600;
     background:linear-gradient(90deg,#0ea5e9,#7c3aed);color:white;text-decoration:none;
     box-shadow:0 6px 18px rgba(124,58,237,0.18);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(124,58,237,0.28);
+  }
+  .btn:active{
+    transform: translateY(-1px);
   }
   .btn.ghost{
     background:transparent;color:#0f172a;border:1px solid rgba(15,23,42,0.06);
     backdrop-filter: blur(6px);
+    box-shadow: none;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .btn.ghost:hover{
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(15,23,42,0.15);
+    box-shadow: 0 8px 20px rgba(15,23,42,0.08);
   }
 
-  .services{display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;}
+  .services{
+    display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;
+    animation: fade-in-up 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+    opacity: 0;
+  }
   .service{
     min-width:160px;flex:1 1 160px;
     background:var(--glass);border-radius:12px;padding:12px;border:1px solid rgba(255,255,255,0.06);
     color:#06202a;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
   }
-  .service h4{margin:0 0 6px 0;font-size:15px;}
-  .service p{margin:0;color:var(--muted);font-size:13px;}
+  .service:hover{
+    background: rgba(255,255,255,0.16);
+    border-color: rgba(255,255,255,0.15);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(120,200,255,0.1);
+  }
+  .service h4{margin:0 0 6px 0;font-size:15px;transition: color 0.3s ease;}
+  .service p{margin:0;color:var(--muted);font-size:13px;transition: color 0.3s ease;}
 
-  .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:8px;}
+  .projects{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:8px;
+  }
   .project{
     border-radius:12px;overflow:hidden;position:relative;
     background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border:1px solid rgba(255,255,255,0.04);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
   }
-  .project .thumb{height:140px;background:linear-gradient(120deg,#dff6ff,#e9e7ff);display:flex;align-items:center;justify-content:center;color:#0f172a;font-weight:600;}
-  .project .meta{padding:12px;}
+  .project:nth-child(1){animation-delay: 0.6s;}
+  .project:nth-child(2){animation-delay: 0.7s;}
+  .project:nth-child(3){animation-delay: 0.8s;}
+  .project:hover{
+    transform: translateY(-8px);
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 16px 40px rgba(120,200,255,0.15);
+    background:linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  }
+  .project .thumb{
+    height:140px;
+    background:linear-gradient(120deg,#dff6ff,#e9e7ff);
+    display:flex;align-items:center;justify-content:center;
+    color:#0f172a;font-weight:600;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .project:hover .thumb{
+    background:linear-gradient(120deg,#c5edff,#d9dcff);
+    transform: scale(1.05);
+  }
+  .project .meta{padding:12px;transition: all 0.3s ease;}
   .project .meta p{margin:0;color:var(--muted);font-size:13px;}
 
-  footer{width:100%;max-width:980px;padding:18px;border-radius:12px;background:transparent;display:flex;justify-content:space-between;align-items:center;color:var(--muted);}
-  footer a{color:var(--muted);text-decoration:none;}
-  footer a:hover{text-decoration:underline;}
+  footer{
+    width:100%;max-width:980px;padding:18px;border-radius:12px;background:transparent;
+    display:flex;justify-content:space-between;align-items:center;color:var(--muted);
+    animation: fade-in-up 1s cubic-bezier(0.4, 0, 0.2, 1) 0.9s forwards;
+    opacity: 0;
+  }
+  footer a{color:var(--muted);text-decoration:none;transition: all 0.3s ease;}
+  footer a:hover{text-decoration:underline;color:#0f172a;}
 
   /* contact button */
-  .contact-card{display:flex;flex-direction:column;gap:8px;}
-  .contact-card a{color:#06202a;text-decoration:none;font-weight:600;}
+  .contact-card{
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .contact-card a{
+    color:#06202a;text-decoration:none;font-weight:600;
+    transition: all 0.3s ease;
+  }
+  .contact-card a:hover{
+    color:#0ea5e9;
+  }
   .small{font-size:13px;color:var(--muted);}
+
+  /* smooth scroll behavior */
+  html{scroll-behavior: smooth;}
 
   /* responsive */
   @media(min-width:760px){
@@ -165,7 +310,7 @@
     <section class="card hero-grid">
       <div class="intro">
         <h2>Design-forward websites with a liquid glass aesthetic</h2>
-        <p>I build fast, mobile-first sites and clean static landing pages that help small businesses and creators get noticed online. I focus on clarity, speed, and a premium visual style inspired by[...]
+        <p>I build fast, mobile-first sites and clean static landing pages that help small businesses and creators get noticed online. I focus on clarity, speed, and a premium visual style inspired by modern design principles.</p>
         <div class="cta-row">
           <a class="btn" href="mailto:henryshub4u@gmail.com">Email Henry</a>
           <a class="btn ghost" href="https://wa.me/2347014608829">WhatsApp +234 701 460 8829</a>
@@ -189,8 +334,8 @@
     </section>
 
     <aside class="card contact-card">
-      <div style="display:flex;gap:10px;align-items:center;">
-        <div style="width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#e6f7ff,#f0e9ff);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-co[...]
+      <div style="display:flex;gap:10px;align-items:center;transition:all 0.4s ease;">
+        <div style="width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,#e6f7ff,#f0e9ff);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;backdrop-filter:blur(8px);">HA</div>
         <div>
           <div style="font-weight:700">Henry Amos</div>
           <div class="small">Jos, Nigeria</div>
@@ -215,7 +360,7 @@
 
   <section style="width:100%;max-width:980px;">
     <div class="card">
-      <h3 style="margin-top:0">Selected Projects</h3>
+      <h3 style="margin-top:0;animation:fade-in-up 0.9s cubic-bezier(0.4,0,0.2,1) 0.6s forwards;opacity:0;">Selected Projects</h3>
       <div class="projects">
         <article class="project">
           <div class="thumb">Bakery Landing</div>
