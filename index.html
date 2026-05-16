@@ -84,11 +84,6 @@
     }
   }
 
-  @keyframes shimmer {
-    0%, 100% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
-  }
-
   @keyframes slide-in {
     from {
       opacity: 0;
@@ -97,6 +92,26 @@
     to {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4), 0 20px 50px rgba(14, 165, 233, 0.15);
+    }
+    50% {
+      box-shadow: 0 0 0 10px rgba(14, 165, 233, 0), 0 20px 50px rgba(14, 165, 233, 0.15);
+    }
+  }
+
+  @keyframes slide-content-in {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 
@@ -280,7 +295,7 @@
   .service h4{margin:0 0 8px 0;font-size:15px;font-weight:700;letter-spacing:-0.3px;}
   .service p{margin:0;color:var(--muted);font-size:13px;line-height:1.5;}
 
-  /* Carousel Styles */
+  /* ✨ ENHANCED CAROUSEL STYLES WITH 3D DEPTH ✨ */
   .carousel-section {
     width: 100%;
     max-width: 980px;
@@ -311,64 +326,108 @@
   .carousel-container {
     position: relative;
     overflow: hidden;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.3);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 24px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.6);
     animation: fade-in-up 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.7s forwards;
     opacity: 0;
+    perspective: 1200px;
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    box-shadow: 
+      0 20px 60px rgba(14,165,233,0.1),
+      inset 0 1px 0 rgba(255,255,255,0.5);
   }
 
   .carousel-wrapper {
     display: flex;
     overflow: hidden;
     position: relative;
+    width: 100%;
+    height: 100%;
   }
 
   .carousel-slide {
     min-width: 100%;
     display: flex;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     flex-shrink: 0;
+    transform-style: preserve-3d;
+    opacity: 0.5;
+    filter: blur(2px);
   }
 
   .carousel-slide.prev {
-    transform: translateX(-100%);
+    transform: translateX(-100%) rotateY(35deg) translateZ(-100px);
+    opacity: 0.3;
+    filter: blur(3px);
   }
 
   .carousel-slide.next {
-    transform: translateX(100%);
+    transform: translateX(100%) rotateY(-35deg) translateZ(-100px);
+    opacity: 0.3;
+    filter: blur(3px);
   }
 
   .carousel-slide.active {
-    transform: translateX(0);
+    transform: translateX(0) rotateY(0deg) translateZ(0);
+    opacity: 1;
+    filter: blur(0);
   }
 
   .slide-content {
     display: flex;
-    gap: 24px;
-    padding: 20px;
+    gap: 32px;
+    padding: 40px;
     width: 100%;
     align-items: center;
+    position: relative;
   }
 
   .slide-image {
     flex: 1;
-    min-height: 300px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(124,58,237,0.08));
+    min-height: 340px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(124,58,237,0.1));
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(14,165,233,0.1);
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .carousel-slide.active .slide-image {
+    box-shadow: 
+      0 40px 80px rgba(14,165,233,0.25),
+      0 0 40px rgba(124,58,237,0.15),
+      inset -2px -2px 8px rgba(255,255,255,0.3),
+      inset 2px 2px 8px rgba(0,0,0,0.1);
+    transform: translateZ(50px);
+  }
+
+  .slide-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.2) 0%, transparent 50%);
+    pointer-events: none;
+    border-radius: 20px;
   }
 
   .slide-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 16px;
+    border-radius: 20px;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .carousel-slide.active .slide-image img {
+    transform: scale(1.02);
   }
 
   .slide-info {
@@ -376,21 +435,39 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
+    transform-style: preserve-3d;
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .carousel-slide.active .slide-info {
+    transform: translateZ(30px);
   }
 
   .slide-info h4 {
     margin: 0;
-    font-size: 20px;
+    font-size: 26px;
     font-weight: 700;
-    letter-spacing: -0.3px;
+    letter-spacing: -0.5px;
     color: #0f172a;
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
+    opacity: 0;
+  }
+
+  .carousel-slide.active .slide-info h4 {
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s forwards;
   }
 
   .slide-info p {
     margin: 0;
     color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
+    font-size: 15px;
+    line-height: 1.7;
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    opacity: 0;
+  }
+
+  .carousel-slide.active .slide-info p {
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
   }
 
   .slide-tags {
@@ -398,73 +475,105 @@
     gap: 8px;
     flex-wrap: wrap;
     margin-top: 8px;
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
+    opacity: 0;
+  }
+
+  .carousel-slide.active .slide-tags {
+    animation: slide-content-in 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s forwards;
   }
 
   .tag {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 8px;
     background: rgba(14,165,233,0.1);
-    border: 1px solid rgba(14,165,233,0.2);
+    border: 1px solid rgba(14,165,233,0.3);
     font-size: 12px;
     font-weight: 600;
     color: #0ea5e9;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+  }
+
+  .carousel-slide.active .tag:hover {
+    background: rgba(14,165,233,0.2);
+    border-color: rgba(14,165,233,0.5);
+    transform: translateY(-2px);
   }
 
   .carousel-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    gap: 12px;
+    padding: 20px 28px;
+    gap: 16px;
+    background: rgba(255,255,255,0.3);
+    border-top: 1px solid rgba(255,255,255,0.4);
+    border-radius: 0 0 24px 24px;
   }
 
   .carousel-nav {
     display: flex;
-    gap: 8px;
+    gap: 12px;
   }
 
   .carousel-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255,255,255,0.6);
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(14,165,233,0.3);
+    background: rgba(14,165,233,0.08);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     font-size: 18px;
     color: #0f172a;
     font-weight: 700;
+    backdrop-filter: blur(10px);
   }
 
   .carousel-btn:hover {
     background: rgba(14,165,233,0.2);
-    transform: scale(1.05);
+    border-color: rgba(14,165,233,0.5);
+    transform: translateY(-3px) scale(1.08);
+    box-shadow: 0 8px 20px rgba(14,165,233,0.2);
+  }
+
+  .carousel-btn:active {
+    transform: translateY(-1px) scale(1.05);
   }
 
   .carousel-dots {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     justify-content: center;
     flex: 1;
   }
 
   .dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: rgba(15,23,42,0.2);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border: 2px solid transparent;
+  }
+
+  .dot:hover {
+    background: rgba(15,23,42,0.35);
+    transform: scale(1.2);
   }
 
   .dot.active {
     background: var(--primary);
-    width: 24px;
+    width: 28px;
     border-radius: 4px;
+    box-shadow: 0 4px 16px rgba(14,165,233,0.4);
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 
   footer{
@@ -519,17 +628,50 @@
   }
 
   @media(max-width:1024px) {
+    .carousel-container {
+      min-height: 500px;
+    }
+    
     .slide-content {
       flex-direction: column;
-      gap: 16px;
+      gap: 24px;
+      padding: 32px;
     }
     
     .slide-image {
-      min-height: 250px;
+      min-height: 280px;
     }
     
     .slide-info {
       order: 2;
+    }
+  }
+
+  @media(max-width:768px) {
+    .carousel-container {
+      min-height: 450px;
+      border-radius: 16px;
+    }
+
+    .carousel-controls {
+      border-radius: 0 0 16px 16px;
+    }
+
+    .slide-content {
+      padding: 24px;
+      gap: 16px;
+    }
+
+    .slide-image {
+      min-height: 220px;
+    }
+
+    .slide-info h4 {
+      font-size: 20px;
+    }
+
+    .slide-info p {
+      font-size: 14px;
     }
   }
 
@@ -542,112 +684,116 @@
     }
     
     .carousel-container {
-      border-radius: 16px;
+      min-height: 380px;
+      border-radius: 14px;
+    }
+
+    .carousel-controls {
+      flex-direction: column;
+      gap: 12px;
+      border-radius: 0 0 14px 14px;
+      padding: 16px;
+    }
+
+    .carousel-nav {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .carousel-dots {
+      width: 100%;
     }
     
     .slide-content {
       padding: 16px;
+      flex-direction: column;
     }
-    
+
     .slide-image {
       min-height: 200px;
     }
-    
+
     .slide-info h4 {
       font-size: 18px;
     }
-    
-    .carousel-controls {
-      padding: 12px 16px;
+
+    .carousel-slide.prev,
+    .carousel-slide.next {
+      transform: translateX(0) rotateY(0) translateZ(0);
+      opacity: 0;
     }
   }
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="blob a" aria-hidden="true"></div>
-  <div class="blob b" aria-hidden="true"></div>
+  <div class="blob a"></div>
+  <div class="blob b"></div>
 
   <header>
     <div class="brand">
-      <div class="logo">
-        <img src="IMG-20260513-WA0095.jpg" alt="Henry Amos">
-      </div>
+      <div class="logo">HA</div>
       <div>
         <h1>Henry Amos</h1>
-        <p>Web Developer — Jos, Nigeria</p>
+        <p>Web Developer</p>
       </div>
     </div>
-    <nav class="small">
-      <span>Portfolio</span>
-    </nav>
   </header>
 
-  <main class="hero parallax-section">
-    <section class="card hero-grid">
-      <div class="intro">
-        <h2>Design-forward websites with premium craftsmanship</h2>
-        <p>I build fast, mobile-first sites and clean landing pages that help businesses and creators stand out. Every pixel is intentional—focusing on clarity, speed, and that premium aesthetic that converts.</p>
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="card intro">
+        <h2>Building Premium Digital Experiences</h2>
+        <p>I create beautiful, high-performance websites and applications that blend cutting-edge design with solid engineering. Each project is crafted with attention to detail and a focus on user experience.</p>
         <div class="cta-row">
-          <a class="btn" href="mailto:henryshub4u@gmail.com">Email Henry</a>
-          <a class="btn ghost" href="https://wa.me/2347014608829">WhatsApp</a>
+          <button class="btn">Get Started</button>
+          <button class="btn ghost">View My Work</button>
         </div>
       </div>
+    </div>
 
-      <div class="services" aria-hidden="false">
+    <div class="card contact-card">
+      <h3 style="margin:0 0 8px 0;font-size:16px;font-weight:700;">Ready to build?</h3>
+      <a href="mailto:hello@henryamos.com">📧 hello@henryamos.com</a>
+      <a href="https://wa.me/234">📱 WhatsApp Me</a>
+      <a href="https://twitter.com/henryamos">𝕏 @henryamos</a>
+    </div>
+  </section>
+
+  <section class="hero">
+    <div class="card fade-on-scroll">
+      <h3 style="margin:0 0 12px 0;font-size:18px;font-weight:700;">Services I Offer</h3>
+      <p style="color:var(--muted);margin:0 0 16px 0;font-size:14px;">Comprehensive web solutions tailored to your needs</p>
+      <div class="services">
         <div class="service">
-          <h4>Landing Pages</h4>
-          <p>Fast, conversion-focused single pages that convert visitors into clients.</p>
+          <h4>🎨 UI/UX Design</h4>
+          <p>Beautiful, intuitive interfaces that users love</p>
         </div>
         <div class="service">
-          <h4>Brochure Sites</h4>
-          <p>3–6 page sites to showcase your business, menu, or portfolio beautifully.</p>
+          <h4>⚡ Web Development</h4>
+          <p>Fast, responsive, production-ready code</p>
         </div>
         <div class="service">
-          <h4>Maintenance</h4>
-          <p>Updates, optimizations, and feature additions to keep sites fresh.</p>
+          <h4>📱 Mobile Web</h4>
+          <p>Perfect experience on any device size</p>
         </div>
       </div>
-    </section>
-
-    <aside class="card contact-card">
-      <div style="display:flex;gap:12px;align-items:center;transition:all 0.4s ease;">
-        <div style="width:64px;height:64px;border-radius:16px;background:linear-gradient(135deg,rgba(14,165,233,0.2),rgba(124,58,237,0.15));border:1px solid rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:32px;">👤</div>
-        <div>
-          <div style="font-weight:700;color:#0f172a;">Henry Amos</div>
-          <div class="small">Jos, Nigeria</div>
-        </div>
-      </div>
-
-      <div style="margin-top:16px;padding:16px;background:rgba(14,165,233,0.08);border-radius:16px;border:1px solid rgba(14,165,233,0.15);">
-        <div class="small" style="text-transform:uppercase;letter-spacing:0.5px;">💌 Get in Touch</div>
-        <a href="mailto:henryshub4u@gmail.com" style="display:block;margin-top:8px;color:#0ea5e9;font-weight:700;text-decoration:none;transition:all 0.3s ease;">henryshub4u@gmail.com</a>
-      </div>
-
-      <div style="margin-top:12px;padding:16px;background:rgba(124,58,237,0.08);border-radius:16px;border:1px solid rgba(124,58,237,0.15);">
-        <div class="small" style="text-transform:uppercase;letter-spacing:0.5px;">💬 WhatsApp</div>
-        <a href="https://wa.me/2347014608829" style="display:block;margin-top:8px;color:#7c3aed;font-weight:700;text-decoration:none;transition:all 0.3s ease;">+234 701 460 8829</a>
-      </div>
-
-      <div style="margin-top:16px;">
-        <a class="btn" href="mailto:henryshub4u@gmail.com?subject=Let's%20Work%20Together&body=Hi%20Henry,%20I'd%20like%20to%20discuss%20a%20project..." style="width:100%;text-align:center;display:block;">Start a Project</a>
-      </div>
-    </aside>
-  </main>
+    </div>
+  </section>
 
   <section class="carousel-section">
     <div class="carousel-header">
-      <h3>Website Examples We Create</h3>
-      <p>Explore the diverse range of beautiful, high-converting sites we build for businesses and creators</p>
+      <h3>Featured Projects</h3>
+      <p>Explore some recent work showcasing different industries and solutions</p>
     </div>
 
     <div class="carousel-container">
       <div class="carousel-wrapper" id="carouselWrapper">
-        <!-- Slide 1: Bakery -->
+        <!-- Slide 1: Bakery Landing -->
         <div class="carousel-slide active">
           <div class="slide-content">
             <div class="slide-image">
-              <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&h=400&fit=crop" alt="Local Bakery Landing Page">
+              <img src="./bakery.jpg" alt="Bakery Landing">
             </div>
             <div class="slide-info">
               <h4>🍰 Local Bakery Landing</h4>
@@ -665,7 +811,7 @@
         <div class="carousel-slide next">
           <div class="slide-content">
             <div class="slide-image">
-              <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500&h=400&fit=crop" alt="Artist Portfolio">
+              <img src="./artist.jpg" alt="Artist Portfolio">
             </div>
             <div class="slide-info">
               <h4>🎨 Artist & Creative Portfolio</h4>
@@ -683,7 +829,7 @@
         <div class="carousel-slide next">
           <div class="slide-content">
             <div class="slide-image">
-              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop" alt="Startup MVP Landing">
+              <img src="./startup.jpg" alt="Startup MVP Landing">
             </div>
             <div class="slide-info">
               <h4>🚀 Startup MVP Landing Page</h4>
@@ -697,55 +843,55 @@
           </div>
         </div>
 
-        <!-- Slide 4: Restaurant Menu -->
+        <!-- Slide 4: Coffee Shop -->
         <div class="carousel-slide next">
           <div class="slide-content">
             <div class="slide-image">
-              <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500&h=400&fit=crop" alt="Restaurant Website">
+              <img src="./coffee.jpg" alt="Coffee Shop Website">
             </div>
             <div class="slide-info">
-              <h4>🍽️ Restaurant & Cafe Site</h4>
-              <p>Beautiful restaurant website featuring menu displays, reservation systems, location maps, and online ordering integration. Designed to drive foot traffic and showcase your culinary excellence.</p>
+              <h4>☕ Specialty Coffee Shop</h4>
+              <p>Premium café experience brought online with beautiful imagery, menu showcases, location integration, and reservation systems. Perfect for coffee enthusiasts wanting to attract both online and foot traffic.</p>
               <div class="slide-tags">
+                <span class="tag">F&B</span>
                 <span class="tag">Reservations</span>
-                <span class="tag">Menu Display</span>
-                <span class="tag">Online Ordering</span>
+                <span class="tag">Premium Design</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Slide 5: Services Business -->
+        <!-- Slide 5: Fashion E-Commerce -->
         <div class="carousel-slide next">
           <div class="slide-content">
             <div class="slide-image">
-              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop" alt="Service Business Website">
+              <img src="./fashion.jpg" alt="Fashion E-Commerce">
             </div>
             <div class="slide-info">
-              <h4>💼 Service Business Website</h4>
-              <p>Professional brochure sites for consultants, agencies, and service providers. Showcase your expertise, build trust with potential clients, and streamline inquiries with integrated contact and booking forms.</p>
+              <h4>👗 Fashion & Lifestyle Store</h4>
+              <p>Modern e-commerce platform with advanced filtering, product recommendations, and seamless checkout. Built for speed and conversion, featuring dynamic product galleries and personalized shopping experiences.</p>
               <div class="slide-tags">
-                <span class="tag">Trust Building</span>
-                <span class="tag">Lead Forms</span>
-                <span class="tag">Professional</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 6: E-Commerce Store -->
-        <div class="carousel-slide next">
-          <div class="slide-content">
-            <div class="slide-image">
-              <img src="https://images.unsplash.com/photo-1563062407-bf49b408e1b5?w=500&h=400&fit=crop" alt="E-Commerce Store">
-            </div>
-            <div class="slide-info">
-              <h4>🛍️ E-Commerce Store</h4>
-              <p>Fast, secure online stores with product showcases, shopping cart functionality, payment integration, and inventory management. Built to maximize conversions and provide excellent shopping experience.</p>
-              <div class="slide-tags">
+                <span class="tag">E-Commerce</span>
                 <span class="tag">Shopping Cart</span>
-                <span class="tag">Payments</span>
-                <span class="tag">Mobile Commerce</span>
+                <span class="tag">Responsive</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 6: Winter Sports E-Commerce -->
+        <div class="carousel-slide next">
+          <div class="slide-content">
+            <div class="slide-image">
+              <img src="./winter.png" alt="Winter Sports Store">
+            </div>
+            <div class="slide-info">
+              <h4>🏂 Winter Sports Marketplace</h4>
+              <p>Vibrant e-commerce store for winter sports gear with stunning product visuals, category organization, and rich filtering options. Designed to showcase premium equipment and drive sales for seasonal campaigns.</p>
+              <div class="slide-tags">
+                <span class="tag">E-Commerce</span>
+                <span class="tag">Seasonal</span>
+                <span class="tag">Visual Commerce</span>
               </div>
             </div>
           </div>
@@ -769,7 +915,7 @@
 </div>
 
 <script>
-  // Carousel functionality
+  // Enhanced 3D Carousel with depth effects
   class Carousel {
     constructor() {
       this.wrapper = document.getElementById('carouselWrapper');
@@ -779,6 +925,7 @@
       this.dotsContainer = document.getElementById('dotsContainer');
       this.currentIndex = 0;
       this.totalSlides = this.slides.length;
+      this.isTransitioning = false;
 
       this.init();
     }
@@ -802,25 +949,35 @@
     attachEventListeners() {
       this.prevBtn.addEventListener('click', () => this.prevSlide());
       this.nextBtn.addEventListener('click', () => this.nextSlide());
+      
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') this.prevSlide();
+        if (e.key === 'ArrowRight') this.nextSlide();
+      });
     }
 
     nextSlide() {
+      if (this.isTransitioning) return;
       this.currentIndex = (this.currentIndex + 1) % this.totalSlides;
       this.updateCarousel();
     }
 
     prevSlide() {
+      if (this.isTransitioning) return;
       this.currentIndex = (this.currentIndex - 1 + this.totalSlides) % this.totalSlides;
       this.updateCarousel();
     }
 
     goToSlide(index) {
+      if (this.isTransitioning || index === this.currentIndex) return;
       this.currentIndex = index;
       this.updateCarousel();
     }
 
     updateCarousel() {
-      // Update slides
+      this.isTransitioning = true;
+      
       this.slides.forEach((slide, index) => {
         slide.classList.remove('active', 'prev', 'next');
         
@@ -833,10 +990,13 @@
         }
       });
 
-      // Update dots
       this.dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === this.currentIndex);
       });
+
+      setTimeout(() => {
+        this.isTransitioning = false;
+      }, 800);
     }
   }
 
@@ -860,7 +1020,6 @@
     });
   }, observerOptions);
 
-  // Observe all fade-on-scroll elements
   document.querySelectorAll('.fade-on-scroll').forEach(el => {
     observer.observe(el);
   });
